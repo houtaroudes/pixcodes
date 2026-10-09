@@ -1,0 +1,9 @@
+node_modules/
+dist/
+
+# Local dev server logs and pid files written by the run scripts.
+.dev/
+
+.env
+.env.local
+.DS_Store
