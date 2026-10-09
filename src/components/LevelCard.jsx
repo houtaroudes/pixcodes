@@ -3,6 +3,14 @@ import { CircleCheckIcon, LockIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge.jsx'
 import { cn } from '@/lib/cn.js'
 
+/**
+ * One row of the board, and every row is the same shape on purpose.
+ *
+ * The board is a table of ten levels, so the ordinal, tier, title, brief and
+ * status sit in the same place on every card and the ten can be compared at a
+ * glance. Nothing here varies for decoration; what varies is only what the
+ * player has actually done, which is the border, the score and the status.
+ */
 const TIER_LABEL = { 1: 'Warm up', 2: 'Build it', 3: 'Get clever' }
 
 export default function LevelCard({ level, entry, unlocked, lockedBy }) {
