@@ -64,13 +64,55 @@ function mediaRules(pattern) {
   })
   return out
 }
+/*
+   * Two animation frames are the clean way to let a change land, but a frame that
+   * is scrolled out of view is not painted, and an unpainted frame never fires an
+   * animation frame. A check that waited on those alone would hang until the run
+   * was called hung, which reads to the player as their own code failing. A timer
+   * therefore stands behind the wait, exactly as it does in the harness itself.
+   */
 function nextFrame() {
   return new Promise(function (resolve) {
-    requestAnimationFrame(function () { requestAnimationFrame(resolve) })
+    var done = false
+    function finish() {
+      if (done) return
+      done = true
+      resolve()
+    }
+    var timer = setTimeout(finish, 300)
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        clearTimeout(timer)
+        finish()
+      })
+    })
   })
 }
 function pause(ms) {
   return new Promise(function (resolve) { setTimeout(resolve, ms) })
+}
+/*
+ * Retry a measurement until it satisfies the ok test, or until a short budget
+ * runs out, and hand back the last reading either way. A scroll-driven animation lands on
+ * the compositor, so a painted value can trail a programmatic scroll by more than
+ * a frame or two; a fixed pause would read the old value and report a failure
+ * for code that is right. The budget stays small on purpose: the whole run has
+ * only a few seconds before the parent calls it hung, so a level waits for a
+ * value to arrive rather than for a page to become perfect.
+ */
+function eventually(read, ok, tries) {
+  var budget = tries === undefined ? 5 : tries
+  var value = read()
+  var spent = 0
+  function step() {
+    if (ok(value) || spent >= budget) return Promise.resolve(value)
+    spent++
+    return pause(50).then(nextFrame).then(function () {
+      value = read()
+      return step()
+    })
+  }
+  return step()
 }
 `.trim()
 

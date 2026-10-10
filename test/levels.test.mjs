@@ -34,12 +34,32 @@ test('every check compiles against the helper preamble', () => {
   }
 })
 
-test('there are ten levels numbered without gaps', () => {
-  assert.equal(LEVELS.length, 10)
+test('there are fifteen levels numbered without gaps', () => {
+  assert.equal(LEVELS.length, 15)
   assert.deepEqual(
     sortLevels(LEVELS).map((level) => level.ordinal),
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
   )
+})
+
+test('a check can wait for a frame without depending on the frame being painted', () => {
+  // An iframe scrolled out of view is not painted, so its animation frames never
+  // fire. Waiting on those alone hung the run, and the player was told their own
+  // code had failed. Every wait needs a timer behind it.
+  assert.match(CHECK_HELPERS, /setTimeout\(finish, \d+\)/)
+  assert.match(CHECK_HELPERS, /requestAnimationFrame/)
+  // A backtick inside the helper string would end the template literal that
+  // holds it, and the whole module would stop parsing.
+  assert.doesNotMatch(CHECK_HELPERS, /`/)
+})
+
+test('a check can wait for a slow value without waiting forever', () => {
+  // A scroll-driven animation lands on the compositor, so the painted value can
+  // trail a programmatic scroll past a fixed pause. The wait for it has to be
+  // bounded all the same: a run that never returns is reported to the player as
+  // their own code hanging, so the retry budget stays small.
+  assert.match(CHECK_HELPERS, /function eventually\(read, ok, tries\)/)
+  assert.match(CHECK_HELPERS, /tries === undefined \? \d+ : tries/)
 })
 
 test('level ids and titles are unique and dash free', () => {
@@ -122,7 +142,9 @@ test('unlockAll opens everything for a reviewer without changing progress', () =
 
 test('nextLevel walks forward and stops at the end', () => {
   assert.equal(nextLevel(LEVELS, 'center-a-box').id, 'progress-bar')
-  assert.equal(nextLevel(LEVELS, 'sticky-nav'), null)
+  assert.equal(nextLevel(LEVELS, 'sticky-nav').id, 'container-card')
+  const last = sortLevels(LEVELS).at(-1)
+  assert.equal(nextLevel(LEVELS, last.id), null, 'the final level has nowhere to walk to')
   assert.equal(nextLevel(LEVELS, 'not-a-level'), null)
 })
 

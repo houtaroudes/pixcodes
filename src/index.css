@@ -2,58 +2,81 @@
 @import "tw-animate-css";
 
 /*
- * PixCodes is light-only by design: the v2 identity is cream, white plates, navy
- * ink and a single orange. That is why `dark` is bound to a class nobody adds
- * instead of the default prefers-color-scheme, so a dark OS cannot flip the app
- * into a theme that was never designed.
+ * PixCodes is dark by design, and the reason is the work rather than the mood:
+ * a player compares two documents, the rendered target and the code that has to
+ * reproduce it. Those two are the only lit surfaces in the app, and everything
+ * else steps back to be the desk they lie on. A light field around two light
+ * sheets flattens the comparison into one page and hides which surface is being
+ * read. `dark` stays bound to a class nobody adds rather than to
+ * prefers-color-scheme, so an OS setting cannot flip the app into a theme that
+ * was never designed.
  */
 @custom-variant dark (&:is(.dark *));
 
 /*
  * Every colour the project is allowed to use. Change only these lines to reskin
- * it. The stage pair is the one dark surface, and pass/fail are functional
- * signals that always ship alongside an icon and a word, never colour alone.
+ * it: the navy desk, a single orange accent, and the pass/fail pair that is a
+ * functional signal and always ships beside an icon and a word.
+ *
+ * The ratio in each comment is WCAG contrast against the surface that comment
+ * names, measured rather than estimated, so a later edit cannot quietly drop a
+ * pair below AA.
  */
 :root {
-  --paper: #f4f4ed;
-  --plate: #ffffff;
-  --ink: #13233f;
-  --muted-surface: #ebebe2;
-  --border-hair: #dcdcd2;
-  --slate: #5a6472;
-  --orange: #f26b1d;
+  /* The desk: the page itself and the panels that sit on it. */
+  --desk: #0b1220;
+  --desk-raised: #151f34;
+  --desk-hover: #223050; /* 1.43:1 above the page, 1.26:1 above a panel */
+  --chalk: #f4f4ed; /* 16.95:1 on the desk, 14.88:1 on a panel */
+  --chalk-muted: #a7b2c7; /* 8.77:1 on the desk, 7.70:1 on a panel */
+  /* Boundaries are a whole 3:1 rather than a whisper, because on a dark ground a
+     panel edge is the only thing defining the panel: elevation is carried by this
+     line instead of by a shadow, which would be invisible here. */
+  --line: #5d6c92; /* 3.59:1 on the desk, 3.15:1 on a panel */
 
-  --stage: #13233f;
-  --stage-ink: #f4f4ed;
-  --stage-line: #33415c;
-  --stage-muted: #96a3b8;
-  --pass: #1f7a4d;
-  --fail: #b3261e;
+  /*
+   * The two lit sheets: the rendered target and the code being written. They are
+   * the same white on purpose, because they are the same kind of object, two
+   * documents being compared, and it is the same white the harness paints every
+   * stage with in src/game/runtime/harness.js.
+   */
+  --sheet: #ffffff;
+  --sheet-inset: #f2f2ea;
+  --sheet-line: #dcdcd2;
+  --sheet-ink: #13233f; /* 15.67:1 on a sheet, 13.93:1 on an inset */
+  --sheet-muted: #5a6472; /* 6.00:1 on a sheet, 5.33:1 on an inset */
+  --sheet-accent: #a8471a; /* 5.86:1 on a sheet, 5.21:1 on an inset */
 
-  --background: var(--paper);
-  --foreground: var(--ink);
-  --card: var(--plate);
-  --card-foreground: var(--ink);
-  --popover: var(--plate);
-  --popover-foreground: var(--ink);
+  --orange: #f26b1d; /* 6.15:1 on the desk: the one accent */
+  --pass: #57c98a; /* 9.03:1 on the desk */
+  --fail: #ff8f86; /* 8.49:1 on the desk */
+
+  --background: var(--desk);
+  --foreground: var(--chalk);
+  --card: var(--desk-raised);
+  --card-foreground: var(--chalk);
+  --popover: var(--desk-raised);
+  --popover-foreground: var(--chalk);
   --primary: var(--orange);
   /* Navy on orange measures 5.15:1, so primary button labels clear WCAG AA.
      White on orange measures 3.05:1, which fails AA for text this size; the
      shadcn default is wrong against this particular orange and is overridden
      here rather than at each call site. */
-  --primary-foreground: var(--ink);
-  --secondary: var(--muted-surface);
-  --secondary-foreground: var(--ink);
-  --muted: var(--muted-surface);
-  --muted-foreground: var(--slate);
-  --accent: var(--muted-surface);
-  --accent-foreground: var(--ink);
+  --primary-foreground: var(--sheet-ink);
+  --secondary: var(--desk-raised);
+  --secondary-foreground: var(--chalk);
+  --muted: var(--desk-raised);
+  --muted-foreground: var(--chalk-muted);
+  --accent: var(--desk-hover);
+  --accent-foreground: var(--chalk);
   --destructive: var(--fail);
-  --destructive-foreground: #ffffff;
-  --border: var(--border-hair);
-  --input: var(--border-hair);
+  --destructive-foreground: var(--desk);
+  --border: var(--line);
+  --input: var(--line);
   --ring: var(--orange);
-  --radius: 0.75rem;
+  /* Tighter than the 0.75rem a soft card grid wants: the level page is made of
+     documents and panels, not of floating cards. */
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -77,10 +100,16 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-stage: var(--stage);
-  --color-stage-ink: var(--stage-ink);
-  --color-stage-line: var(--stage-line);
-  --color-stage-muted: var(--stage-muted);
+  --color-desk: var(--desk);
+  --color-desk-raised: var(--desk-raised);
+  --color-desk-hover: var(--desk-hover);
+  --color-line: var(--line);
+  --color-sheet: var(--sheet);
+  --color-sheet-inset: var(--sheet-inset);
+  --color-sheet-line: var(--sheet-line);
+  --color-sheet-ink: var(--sheet-ink);
+  --color-sheet-muted: var(--sheet-muted);
+  --color-sheet-accent: var(--sheet-accent);
   --color-pass: var(--pass);
   --color-fail: var(--fail);
 
@@ -120,6 +149,17 @@
     font-family: var(--font-display);
     line-height: 1.15;
     letter-spacing: -0.02em;
+  }
+
+  /*
+   * A focus ring has to contrast with the surface under it, and this app has two.
+   * Orange measures 6.15:1 on the desk but only 3.05:1 on a sheet, which sits on
+   * the 3:1 floor for non-text contrast with nothing to spare, so inside a sheet
+   * the ring is the deep orange at 5.86:1. One ring rule, two surfaces, both
+   * measured.
+   */
+  .sheet {
+    --ring: var(--sheet-accent);
   }
 
   /* The board is a game surface: the system cursor stays visible, and a focus

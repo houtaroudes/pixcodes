@@ -7,16 +7,19 @@ import { EditorView } from '@codemirror/view'
 import { tags } from '@lezer/highlight'
 
 /*
- * The stage is the only dark surface in PixCodes, and the syntax palette stays
- * inside the same four colours as the rest of the app: orange for the structural
- * tokens, cream for values, grey for comments. No fifth hue, so the editor reads
- * as part of the page rather than a pasted theme.
+ * The editor is one of the two lit sheets in PixCodes, and it is lit for the same
+ * reason the target is: the player is comparing a rendered document with a
+ * written one, so both are the same white paper on a dark desk. Navy ink, and the
+ * deep orange for structure, which is the accent at the strength that survives on
+ * paper. Every value below was measured against the sheet rather than picked by
+ * eye: ink 15.67:1, deep orange 5.86:1, muted 6.00:1, and the deep orange on an
+ * active line 5.21:1, which all clear AA for text this size.
  */
-const stageTheme = EditorView.theme(
+const sheetTheme = EditorView.theme(
   {
     '&': {
-      backgroundColor: '#13233f',
-      color: '#f4f4ed',
+      backgroundColor: '#ffffff',
+      color: '#13233f',
       fontSize: '13px',
       height: '100%',
     },
@@ -24,28 +27,28 @@ const stageTheme = EditorView.theme(
       fontFamily: '"JetBrains Mono", ui-monospace, monospace',
       lineHeight: '1.7',
     },
-    '.cm-content': { caretColor: '#f26b1d', padding: '12px 0' },
-    '.cm-cursor, .cm-dropCursor': { borderLeftColor: '#f26b1d', borderLeftWidth: '2px' },
+    '.cm-content': { caretColor: '#a8471a', padding: '12px 0' },
+    '.cm-cursor, .cm-dropCursor': { borderLeftColor: '#a8471a', borderLeftWidth: '2px' },
     '.cm-gutters': {
-      backgroundColor: '#13233f',
+      backgroundColor: '#ffffff',
       color: '#5a6472',
       border: 'none',
       paddingRight: '4px',
     },
-    '.cm-activeLine': { backgroundColor: '#1b2d4d' },
-    '.cm-activeLineGutter': { backgroundColor: '#1b2d4d', color: '#96a3b8' },
-    '.cm-selectionBackground, .cm-content ::selection': { backgroundColor: '#2c4370' },
-    '&.cm-focused .cm-selectionBackground': { backgroundColor: '#2c4370' },
-    '.cm-matchingBracket': { backgroundColor: '#2c4370', color: '#f4f4ed' },
+    '.cm-activeLine': { backgroundColor: '#f2f2ea' },
+    '.cm-activeLineGutter': { backgroundColor: '#f2f2ea', color: '#5a6472' },
+    '.cm-selectionBackground, .cm-content ::selection': { backgroundColor: '#cfd8e6' },
+    '&.cm-focused .cm-selectionBackground': { backgroundColor: '#cfd8e6' },
+    '.cm-matchingBracket': { backgroundColor: '#cfd8e6', color: '#13233f' },
   },
-  { dark: true },
+  { dark: false },
 )
 
-const stageHighlight = HighlightStyle.define([
-  /* The stage's own muted tone, not a greyer one: a comment is still text the
-     player reads, and this measures 6.14:1 on the stage and 5.38:1 on an active
-     line, where the previous colour fell to 3.93:1. */
-  { tag: tags.comment, color: '#96a3b8', fontStyle: 'italic' },
+const sheetHighlight = HighlightStyle.define([
+  /* The sheet's own muted tone, not a greyer one: a comment is still text the
+     player reads, and this measures 6.00:1 on the sheet and 5.33:1 on an active
+     line. */
+  { tag: tags.comment, color: '#5a6472', fontStyle: 'italic' },
   {
     tag: [
       tags.keyword,
@@ -59,7 +62,7 @@ const stageHighlight = HighlightStyle.define([
       tags.definition(tags.propertyName),
       tags.definition(tags.variableName),
     ],
-    color: '#f26b1d',
+    color: '#a8471a',
   },
   {
     tag: [
@@ -74,17 +77,17 @@ const stageHighlight = HighlightStyle.define([
       tags.separator,
       tags.meta,
     ],
-    color: '#f4f4ed',
+    color: '#13233f',
   },
-  { tag: tags.invalid, color: '#ff8f86' },
+  { tag: tags.invalid, color: '#b3261e' },
 ])
 
 export default function Editor({ value, onChange, label, language = 'css' }) {
   const extensions = useMemo(
     () => [
       language === 'html' ? htmlLanguage() : cssLanguage(),
-      stageTheme,
-      syntaxHighlighting(stageHighlight),
+      sheetTheme,
+      syntaxHighlighting(sheetHighlight),
     ],
     [language],
   )

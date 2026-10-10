@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeftIcon, LockIcon, PlayIcon, RotateCcwIcon } from 'lucide-react'
+import { ArrowLeftIcon, CircleCheckIcon, LockIcon, PlayIcon, RotateCcwIcon } from 'lucide-react'
 import Editor from './Editor.jsx'
 import SandboxFrame from './SandboxFrame.jsx'
 import TargetPreview from './TargetPreview.jsx'
 import CheckList from './CheckList.jsx'
 import ResultDialog from './ResultDialog.jsx'
-import { Badge } from '@/components/ui/badge.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { LEVELS } from '@/game/levels/index.js'
 import { useProgress } from '@/game/progress-context.jsx'
@@ -132,7 +131,7 @@ function Playfield({ levelId }) {
       <div className="mx-auto max-w-2xl px-5 py-16">
         <h1 className="font-display text-2xl font-bold">No level by that name</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The board has ten levels, and that address is not one of them.
+          The board has {LEVELS.length} levels, and that address is not one of them.
         </p>
         <Button asChild className="mt-5">
           <Link to="/">Back to the board</Link>
@@ -182,7 +181,14 @@ function Playfield({ levelId }) {
               Best {entry.score}%, {entry.attempts} {entry.attempts === 1 ? 'run' : 'runs'}
             </span>
           )}
-          {cleared && <Badge variant="secondary">Cleared</Badge>}
+          {/* An icon and a word, never the green alone: status has to survive
+              being read without colour. */}
+          {cleared && (
+            <span className="flex items-center gap-1 text-pass">
+              <CircleCheckIcon className="size-3.5" aria-hidden="true" />
+              Cleared
+            </span>
+          )}
         </div>
       </div>
 
@@ -192,7 +198,9 @@ function Playfield({ levelId }) {
             {String(level.ordinal).padStart(2, '0')}
           </span>
           <h1 className="font-display text-2xl font-bold tracking-tight">{level.title}</h1>
-          <Badge variant="outline">{level.xp} xp</Badge>
+          {/* Mono, like every other number in the app: the xp is data about the
+              level, and the mono face is what separates data from prose here. */}
+          <span className="font-mono text-xs text-muted-foreground">{level.xp} xp</span>
         </div>
         <p className="max-w-3xl text-sm text-muted-foreground">{level.brief}</p>
       </header>
@@ -227,7 +235,7 @@ function Playfield({ levelId }) {
             </span>
           </div>
 
-          <div className="h-[320px] overflow-hidden rounded-xl border border-stage bg-stage">
+          <div className="sheet h-[320px] overflow-hidden rounded-xl border border-sheet-line bg-sheet">
             <Editor
               value={code}
               onChange={handleCodeChange}

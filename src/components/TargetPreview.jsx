@@ -38,7 +38,9 @@ export default function TargetPreview({ level }) {
           {STAGE_WIDTH} x {STAGE_HEIGHT}
         </span>
       </div>
-      <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+      {/* No shadow: on the dark desk the lit sheet inside the frame is the
+          elevation, and a shadow under it would only read as a smudge. */}
+      <div className="overflow-hidden rounded-xl border bg-card">
         <SandboxFrame
           title={`Target for ${level.title}`}
           onFrame={(node) => {

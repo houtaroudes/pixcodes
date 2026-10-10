@@ -1,8 +1,8 @@
 # PixCodes
 
-A browser game where you match a rendered target by writing the HTML and CSS behind it. Ten
-levels, from centring a card to a sticky bar that reacts to scroll. Everything runs in the tab,
-and progress is saved on this machine.
+A browser game where you match a rendered target by writing the HTML and CSS behind it. Fifteen
+levels, from centring a card to a scroll-driven progress bar and cascade layers. Everything runs
+in the tab, and progress is saved on this machine.
 
 ## Run it
 
@@ -57,7 +57,7 @@ level starts unsolved.
 
 | Path | What it holds |
 |---|---|
-| `src/game/levels/` | The ten levels, one file each, plus the ordered set |
+| `src/game/levels/` | The fifteen levels, one file each, plus the ordered set |
 | `src/game/runtime/harness.js` | The sandbox document, both render shapes, the check runner |
 | `src/game/runtime/sandbox.js` | The parent half of the message protocol, with the watchdog |
 | `src/game/runtime/check-helpers.js` | The helpers every check reads with, and the stage size |
@@ -69,8 +69,9 @@ level starts unsolved.
 
 - Progress and drafts live in this browser's localStorage. There is no account and no scoreboard,
   so a cleared level is only ever your own record.
-- The board is light only, and that is deliberate: cream paper, white plates, navy ink and one
-  orange. `dark` is bound to a class nothing adds, so a dark OS cannot flip the game into a theme
-  nobody designed.
+- The board runs a dark workbench that is PixCodes' own: deep ink ground, cream editor and
+  target sheets, navy ink and one orange kept from the portfolio, JetBrains Mono on the ordinals
+  and xp. The change to `dark` is bound to a class nothing adds, so a dark OS cannot flip the
+  game into a theme nobody designed.
 - A run the frame never measured is reported as unmeasured. It is not scored, and it does not count
   as an attempt, so a frame that goes quiet costs you nothing.

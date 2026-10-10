@@ -31,8 +31,9 @@ export const HELLO = 'pixcodes:hello'
 
 /**
  * The baseline every level is rendered against, so a measurement means the same
- * thing in the target and in the player's attempt. These two colours are the
- * same values as `--ink` and `--plate` in src/index.css, which cannot import a
+ * thing in the target and in the player's attempt. This pair is the lit sheet in
+ * src/index.css: the stage is a document, so it stays cream and navy ink even
+ * though the app around it is the dark desk. That stylesheet cannot import a
  * JavaScript file, so this is the one place the pair is written twice.
  *
  * The player's own styles land in a later `<style>` element, so on a tie the

@@ -32,9 +32,9 @@ export default function LevelMap({ levels }) {
               Match the target
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Ten small front-end puzzles. Each one shows a rendered target, and you write the CSS
-              or the whole document until the checks agree with it. Everything runs in a sandbox in
-              this browser tab, and your progress is saved here on this machine.
+              A board of small front-end puzzles. Each one shows a rendered target, and you write
+              the CSS or the whole document until the checks agree with it. Everything runs in a
+              sandbox in this browser tab, and your progress is saved here on this machine.
             </p>
           </div>
           <div className="flex flex-col items-start gap-3">

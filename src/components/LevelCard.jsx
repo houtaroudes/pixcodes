@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom'
 import { CircleCheckIcon, LockIcon } from 'lucide-react'
-import { Badge } from '@/components/ui/badge.jsx'
 import { cn } from '@/lib/cn.js'
 
 /**
  * One row of the board, and every row is the same shape on purpose.
  *
- * The board is a table of ten levels, so the ordinal, tier, title, brief and
- * status sit in the same place on every card and the ten can be compared at a
+ * The board is a table of levels, so the ordinal, tier, title, brief and status
+ * sit in the same place on every card and the whole board can be compared at a
  * glance. Nothing here varies for decoration; what varies is only what the
  * player has actually done, which is the border, the score and the status.
  */
@@ -21,8 +20,11 @@ export default function LevelCard({ level, entry, unlocked, lockedBy }) {
   const body = (
     <article
       className={cn(
-        'flex h-full flex-col gap-3 rounded-xl border bg-card p-4 transition-shadow',
-        unlocked && 'hover:shadow-md',
+        'flex h-full flex-col gap-3 rounded-xl border bg-card p-4 transition-colors',
+        /* Elevation here is the edge, not a shadow: on the dark desk a shadow is
+           invisible, and a brighter line on hover says "this one is live" for the
+           same cost. */
+        unlocked && 'hover:border-chalk-muted/70 hover:bg-desk-hover',
         cleared && 'border-pass/40',
       )}
     >
@@ -30,9 +32,11 @@ export default function LevelCard({ level, entry, unlocked, lockedBy }) {
         <p className="font-mono text-[11px] text-muted-foreground">
           {String(level.ordinal).padStart(2, '0')}
         </p>
-        <Badge variant={cleared ? 'secondary' : 'outline'} className="shrink-0">
+        {/* Plain text rather than a pill: the tier is a word, and a capsule
+            around it would add a shape the level data does not need. */}
+        <span className="shrink-0 font-mono text-[11px] text-muted-foreground">
           {TIER_LABEL[level.tier] ?? 'Level'}
-        </Badge>
+        </span>
       </div>
 
       <h3 className="font-display text-base font-semibold">{level.title}</h3>

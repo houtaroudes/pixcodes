@@ -21,6 +21,9 @@ export default function ResultDialog({ open, onOpenChange, level, outcome, next 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      {/* The one surface in the app that keeps a shadow. Everything else earns its
+          edge from a hairline, but a modal is above the page rather than lying on
+          the desk, so elevation is the honest signal for it. */}
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
