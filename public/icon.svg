@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Game icon: a code bracket on a navy tile. The tilde-ish swing of the
+       strokes and the orange caret make it read as playful code, not terminal. -->
+  <rect width="64" height="64" rx="14" fill="#13233f"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#5d6c92" stroke-opacity="0.55"/>
+  <!-- paired open/close chevrons drawn with a slight stagger -->
+  <path d="M22 22 L13 32 L22 42" fill="none" stroke="#f4f4ed" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M42 22 L51 32 L42 42" fill="none" stroke="#f4f4ed" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- the orange caret: the pixel you actually move in a code game -->
+  <rect x="29.5" y="24" width="5" height="16" rx="2.5" fill="#f26b1d"/>
+</svg>

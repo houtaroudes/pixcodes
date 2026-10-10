@@ -142,6 +142,47 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /*
+   * The desk is not flat, because a real workbench is not: light pools under
+   * the work and falls off at the edges. This is the one atmospheric layer in
+   * the app, and it is fixed so panels scroll over it unchanged. No grid, no
+   * dots: those decorate without meaning here. The pool of light sits behind
+   * the level cards and behind the two lit sheets, the two places a player
+   * actually looks.
+   */
+  #root {
+    position: relative;
+    background:
+      radial-gradient(1100px 620px at 50% -180px, rgba(242, 107, 29, 0.09), transparent 70%),
+      radial-gradient(900px 620px at 50% 105%, rgba(93, 108, 146, 0.14), transparent 72%),
+      var(--background);
+    background-attachment: fixed;
+  }
+
+  /* Pixel alphabet soup drifting through the top pool of light. The glyphs are
+     fragments of the code the player writes, so the texture is the game's own
+     content, not an ornament borrowed from another product. Kept faint (7%)
+     and behind every panel (z-index 0), so it is texture, not noise. */
+  #root::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(244, 244, 237, 0.07) 2px, transparent 2px),
+      linear-gradient(90deg, rgba(244, 244, 237, 0.07) 2px, transparent 2px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 34rem);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 34rem);
+  }
+
+  /* Panels above the texture. */
+  #root > * {
+    position: relative;
+    z-index: 1;
+  }
+
   h1,
   h2,
   h3,
