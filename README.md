@@ -8,7 +8,7 @@ in the tab, and progress is saved on this machine.
 
 ```
 npm install
-npm run dev     # http://localhost:5300
+npm run dev     # http://localhost:5310
 npm test        # node --test, the pure logic plus the level specs
 npm run lint    # oxlint
 npm run build   # vite build
